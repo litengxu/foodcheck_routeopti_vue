@@ -43,6 +43,16 @@ export default new Router({
                     meta: { title: '基本表单' }
                 },
                 {
+                    path: '/sampling_account_management',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingAccountManagement.vue'),
+                    meta: { title: '抽检账号管理',adminpermission:true}
+                },
+                {
+                    path: '/sampling_inspector_information_management',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingInspectorInformationManagement.vue'),
+                    meta: { title: '抽检员信息管理',adminpermission:true}
+                },
+                {
                     path: '/admin_account_manage',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/AdminMessageManage.vue'),
                     meta: { title: '管理员账号及权限管理',permission: true }

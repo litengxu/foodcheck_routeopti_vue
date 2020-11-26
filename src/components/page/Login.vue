@@ -52,11 +52,11 @@ export default {
 //                            请求成功，response为成功信息参数
                             if(response.data.errorCode == 200){
                                 this.$message.success('登录成功');
+
                                 localStorage.setItem('ms_username', this.param.username);
 //                                localStorage.setItem("token",response.data.data);
                                 this.$store.commit('$_setToken', response.data.data.token);
                                 localStorage.setItem('rolename', response.data.data.rolename);
-
                                 this.$router.push('/');
                             }
 

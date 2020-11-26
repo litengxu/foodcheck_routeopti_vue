@@ -108,9 +108,10 @@ export default {
 
     //                            请求成功，response为成功信息参数
                                 this.$message.success('修改成功！');
-                                this.getaccountmessage();
+//                                this.getaccountmessage();
                             } else {
                                 console.log(response.message);//请求失败，response为失败信息
+                                this.getaccountmessage();
                                 this.$message.error('修改失败！');
                             }
                     });

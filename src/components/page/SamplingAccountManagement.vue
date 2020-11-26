@@ -158,7 +158,6 @@ export default {
         getallaccountmessage(){
             this.$axios.get("/superuser/getallaccountmessage",0
             ).then(response=>{
-
                 for (var i=0;i<response.data.data.length;i=i+1){
                     this.form.list[i] = i;
                     this.form.id[i] = response.data.data[i].id;
@@ -190,10 +189,9 @@ export default {
                     if (response.status>= 200 && response.status < 300) {
                         //                            请求成功，response为成功信息参数
                         this.$message.success('修改成功！');
-//                        this.getallaccountmessage();
+                        this.getallaccountmessage();
                     } else {
                         console.log(response.message);//请求失败，response为失败信息
-                        this.getallaccountmessage();
                         this.$message.error('修改失败！');
                     }
                 });

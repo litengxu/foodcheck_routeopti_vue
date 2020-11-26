@@ -70,6 +70,20 @@ export default {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: 'tab选项卡'
+                },{
+                    icon: 'el-icon-lx-calendar',
+                    index: '9',
+                    title: '分组管理',
+                    subs: [
+                        {
+                            index: 'sampling_account_management',
+                            title: '抽检账号管理'
+                        },
+                        {
+                            index: 'sampling_inspector_information_management',
+                            title: '抽检员信息管理'
+                        },
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-calendar',
