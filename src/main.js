@@ -41,13 +41,13 @@ router.beforeEach((to, from, next) => {
 
         next('/login');
     } else if (to.meta.permission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
+        // 如果是超级管理员权限则可进入
         rolename === 'superadmin' ? next() : next('/403');
         //控制台会弹出重定向错误，不影响使用，直接清空
         console.clear()
 
     } else if (to.meta.adminpermission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
+        // 如果是管理员权限则可进入
         rolename === 'admin' ? next() : next('/403');
         //控制台会弹出重定向错误，不影响使用，直接清空
         console.clear()

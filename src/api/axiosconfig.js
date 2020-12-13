@@ -18,9 +18,11 @@ axios.interceptors.response.use(
         if(response.data.errorCode == 2002){
             Message.error("账号已过期");
 
-        }else if(response.data.errorCode == 2001){
+        } else if(response.status< 200 || response.status > 300){
+            Message.error("出错了");
+            return;
+        } else if(response.data.errorCode == 2001){
             Message.error("用户未登录");
-
         }
         else if(response.data.errorCode == 2003){
             Message.error("密码错误");
@@ -50,13 +52,15 @@ axios.interceptors.response.use(
 
         }else if(response.data.errorCode == 3001){
             Message.error("权限不足");
-
+        }else if(response.data.success == false){
+            Message.error(response.data.errorMsg);
+            return;
+        }else if(response.data.code > 200){
+            Message.error(response.data.message);
+            return;
+        }else{
+            return response;
         }
-        else{
-            // Message.error("错误");
-
-        }
-        return response;
 
 }, error => {
     if (error.response.status == 504 || error.response.status == 404) {
@@ -77,7 +81,7 @@ axios.interceptors.response.use(
 })
 axios.interceptors.request.use(
     config =>{
-
+        /*在请求头中加入token*/
         if(localStorage.getItem('token')){
             config.headers.Authorization =localStorage.getItem('token')
         }

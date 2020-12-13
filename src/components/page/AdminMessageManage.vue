@@ -141,24 +141,31 @@ export default {
                     })
             )
                 .then (response => {
-                    if (response.status>= 200 && response.status < 300) {
-                        //  请求成功，response为成功信息参数
-                        if(response.data.success == false){
-                            this.$message.error(response.data.errorMsg);
-                        }else {
-                            this.$message.success('添加成功！');
-                            this.getallaccountmessage();
-                        }
-                    } else {
-                        console.log(response.message);//请求失败，response为失败信息
-                        this.$message.error('添加失败！');
+                    if(response == null){
+                        return;
                     }
+                    this.$message.success('添加成功！');
+                    this.getallaccountmessage();
+//                    if (response.status>= 200 && response.status < 300) {
+//                        //  请求成功，response为成功信息参数
+//                        if(response.data.success == false){
+//                            this.$message.error(response.data.errorMsg);
+//                        }else {
+//                            this.$message.success('添加成功！');
+//                            this.getallaccountmessage();
+//                        }
+//                    } else {
+//                        console.log(response.message);//请求失败，response为失败信息
+//                        this.$message.error('添加失败！');
+//                    }
                 });
         },
         getallaccountmessage(){
             this.$axios.get("/superuser/getallaccountmessage",0
             ).then(response=>{
-
+                if(response == null){
+                    return;
+                }
                 for (var i=0;i<response.data.data.length;i=i+1){
                     this.form.list[i] = i;
                     this.form.id[i] = response.data.data[i].id;
@@ -187,15 +194,19 @@ export default {
                     })
                 )
                 .then (response => {
-                    if (response.status>= 200 && response.status < 300) {
-                        //                            请求成功，response为成功信息参数
-                        this.$message.success('修改成功！');
-//                        this.getallaccountmessage();
-                    } else {
-                        console.log(response.message);//请求失败，response为失败信息
-                        this.getallaccountmessage();
-                        this.$message.error('修改失败！');
+                    if(response == null){
+                        return;
                     }
+                    this.$message.success('修改成功！');
+//                    if (response.status>= 200 && response.status < 300) {
+//                        //                            请求成功，response为成功信息参数
+//                        this.$message.success('修改成功！');
+////                        this.getallaccountmessage();
+//                    } else {
+//                        console.log(response.message);//请求失败，response为失败信息
+//                        this.getallaccountmessage();
+//                        this.$message.error('修改失败！');
+//                    }
                 });
 
         }

@@ -75,6 +75,9 @@ export default {
             this.$axios.get("/user/getaccountmessage",
                 {params:{accountname:this.accountname}}
                 ).then(response=>{
+                if(response == null){
+                    return;
+                }
                     this.form.id = response.data.data.id;
                     this.form.accountname = response.data.data.account;
                     this.form.username = response.data.data.user_name;
@@ -104,16 +107,22 @@ export default {
                         })
                         )
                         .then (response => {
-                            if (response.status>= 200 && response.status < 300) {
-
-    //                            请求成功，response为成功信息参数
-                                this.$message.success('修改成功！');
-//                                this.getaccountmessage();
-                            } else {
-                                console.log(response.message);//请求失败，response为失败信息
-                                this.getaccountmessage();
-                                this.$message.error('修改失败！');
+                            this.getaccountmessage();
+                            if(response == null){
+                                return;
                             }
+//                            请求成功，response为成功信息参数
+                            this.$message.success('修改成功！');
+//                            if (response.status>= 200 && response.status < 300) {
+//
+//    //                            请求成功，response为成功信息参数
+//                                this.$message.success('修改成功！');
+////                                this.getaccountmessage();
+//                            } else {
+//                                console.log(response.message);//请求失败，response为失败信息
+//                                this.getaccountmessage();
+//                                this.$message.error('修改失败！');
+//                            }
                     });
 
                 }
