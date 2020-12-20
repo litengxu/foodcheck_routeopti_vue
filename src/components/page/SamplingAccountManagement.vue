@@ -14,18 +14,18 @@
                         icon="el-icon-plus"
                         class="handle-del mr10"
                         @click="dialogFormVisible = true"
-                >添加新的抽检员信息</el-button>
+                >添加新的抽检账号</el-button>
                 <el-button
                         type="primary"
                         icon="el-icon-refresh"
                         class="handle-del mr10"
-                        @click="dialogFormVisible = true"
+                        @click="resetaccount()"
                 >重置抽检员到抽检账号的分配</el-button>
                 <el-button
                         type="primary"
                         icon="el-icon-magic-stick"
                         class="handle-del mr10"
-                        @click="dialogFormVisible = true"
+                        @click="randomlyassigned()"
                 >随机分配抽检员到抽检账号</el-button>
             </div>
             <!--基本信息-->
@@ -39,11 +39,11 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
-                <el-table-column prop="s_account" label="账号"></el-table-column>
+                <el-table-column sortable prop="s_account" label="账号"></el-table-column>
                 <el-table-column prop="s_password" label="密码"></el-table-column>
-                <el-table-column prop="s_username" label="用户名"></el-table-column>
+                <el-table-column sortable prop="s_username" label="用户名"></el-table-column>
                 <!--<el-table-column prop="sampling_inspector_ids" label="分配的抽检员id信息"></el-table-column>-->
-                <el-table-column prop="sampling_inspector_names" label="分配的抽检员姓名"></el-table-column>
+                <el-table-column sortable prop="sampling_inspector_names" label="分配的抽检员姓名"></el-table-column>
                 <el-table-column label="是否参与抽检" align="center">
                     <template slot-scope="scope">
                     <el-switch
@@ -54,8 +54,8 @@
                     </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column prop="last_update_time" label="上次更新时间"></el-table-column>
-                <el-table-column prop="create_time" label="创建时间"></el-table-column>
+                <el-table-column sortable prop="last_update_time" label="上次更新时间"></el-table-column>
+                <el-table-column sortable prop="create_time" label="创建时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -82,7 +82,7 @@
                         background
                         layout="total, prev, pager, next"
                         :current-page="query.pageIndex"
-                        :page-size="query.pageSize"
+                        :page-size= "query.pageSize"
                         :total="pageTotal"
                         @current-change="handlePageChange"
                 ></el-pagination>
@@ -149,23 +149,45 @@
         <!--分配抽检员弹出框-->
         <el-dialog title="分配抽检员到此账号" :visible.sync="distributeVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="活动性质">
+                <el-form-item label="已分配">
+                    <el-checkbox v-model="checked"  v-for="name in havedistributenames" :label="name" :key="name" disabled>{{name}}</el-checkbox>
+                </el-form-item>
+                <el-form-item label="请选择">
                     <el-checkbox-group v-model="distributenames">
                         <el-checkbox v-for="name in undistributenames" :label="name" :key="name">{{name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button @click="distributeVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveDistribute">确 定</el-button>
             </span>
         </el-dialog>
+        <!--随机分配弹出框-->
+        <el-dialog title="选择每个抽检账号分配抽检员的数目" :visible.sync="randomVisible" width="30%">
+        <el-form ref="form" :model="form" label-width="70px">
+            <el-select v-model="selectvalue" placeholder="请选择">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="randomVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saverandom">确 定</el-button>
+            </span>
+    </el-dialog>
     </div>
 </template>
 
 <script>
     import { fetchData } from '../../api/index';
+    import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
     export default {
+        components: {ElCheckbox},
         name: 'basetable',
         data() {
             return {
@@ -180,12 +202,14 @@
                     name: '',
                     pageIndex: 1,
                     pageSize: 10
+//                pageSize: [100, 200, 300, 400]
                 },
                 tableData: [],
                 multipleSelection: [],
                 delList: [],
                 editVisible: false,
                 distributeVisible:false,
+                randomVisible:false,
                 pageTotal: 0,
                 form: {},
                 idx: -1,
@@ -195,10 +219,24 @@
                     s_account:'',
                     s_password:'',
                     s_username:'',
-                    whether_participate: "",
+                    whether_participate: true,
                 },
                 distributenames:[],
-                undistributenames:["1","2"]
+                undistributenames:[],
+                havedistributenames:[],
+                checked:true,
+                options: [{
+                    value: 1,
+                    label: '每个账号分配一个抽检员'
+                }, {
+                    value: 2,
+                    label: '每个账号分配两个抽检员'
+                }, {
+                    value: 3,
+                    label: '每个账号分配三个抽检员'
+                }],
+                selectvalue:2
+
             };
         },
         created() {
@@ -210,6 +248,8 @@
                 this.$axios.post('/ssaccount/getallssaccountbyadminaccount',
                     this.$qs.stringify(
                         {
+                            pageIndex:this.query.pageIndex,
+                            pageSize:this.query.pageSize,
                             adminaccount:localStorage.getItem('ms_username'),
                         })
                 )
@@ -218,7 +258,8 @@
                             return;
                         }
 
-                        this.tableData = response.data.data;
+                        this.tableData = response.data.data.tableData;
+                        this.pageTotal = response.data.data.pageTotal
 
 //                        if (response.status>= 200 && response.status < 300) {
 //                            //  请求成功，response为成功信息参数
@@ -367,50 +408,103 @@
             },
             // 分页导航
             handlePageChange(val) {
-//                this.$set(this.query, 'pageIndex', val);
-//                this.getData();
+                this.$set(this.query, 'pageIndex', val);
+                this.getData();
             },
             /*处理分配信息*/
             handleDistribute(index,row ){
-                this.distributeVisible = true;
+
                 this.idx = index;
                 this.form = row;
                 this.$axios.post('/siinformation/selectunassignedByAdminAccount',
                     this.$qs.stringify(
                         {
                             accountname:localStorage.getItem("ms_username"),
+                            siiaccountid:this.form.id
                         })
+                     )
+                    .then (response => {
+                        if(response == null){
+                            return;
+                        }
+                        this.undistributenames=[];
+                        this.havedistributenames=[];
+                        for(var i=0;i<response.data.data.undes.length;i++){
+                            this.undistributenames[i] = response.data.data.undes[i].sii_name;
+                        }
+                        var str=response.data.data.des; //这是一字符串
+                        if(str!=null){
+                            var strs= new Array(); //定义一数组
+                            strs=str.split("-"); //字符分割
+                            for (i=0;i<strs.length ;i++ )
+                            {
+                                this.havedistributenames[i] = strs[i];
+                            }
+                        }
+
+                        this.distributeVisible = true;
+                    });
+
+            },
+            /*保存分配信息*/
+            saveDistribute(){
+                this.distributeVisible = false;
+                this.$axios.post('/ssaccount/distributetossaccount',
+                    this.$qs.stringify(
+                        {
+                            adminaccount:localStorage.getItem("ms_username"),
+                            distributenames: this.distributenames.toString(),
+                            insaccountid:this.form.id
+                        }),
+//                    {headers: {'Content-Type': 'contentType:"application/json"'}}
                 )
                     .then (response => {
                         if(response == null){
                             return;
                         }
-                        console.log(response)
-//
-//                        this.$set(this.tableData, this.idx, this.form);
-//                        this.$message.success('修改成功！');
-//                        if (response.status>= 200 && response.status < 300) {
-//                            if(response.data.success == false){
-//                                this.$message.error(response.data.errorMsg);
-//                            }else if(response.data.code == 500){
-//                                this.$message.error(response.data.message);
-//                            }else {
-//                                //  请求成功，response为成功信息参数
-//                                // 把table的idx行修改为form，不加也会修改。
-//                                // 双向数据绑定，不用再调用getData方法
-//
-//                            }
-//
-//                        } else {
-//                            this.$message.error('修改失败！');
-//                        }
+                        this.getData();
+                        this.$message.success('分配成功');
+                    });
+                    this.distributenames = [];
+            },
+            /*重置抽检员到抽检账号的分配*/
+            resetaccount(){
+
+                this.$axios.post('/ssaccount/resetsamplingaccount',
+                    this.$qs.stringify(
+                        {
+                            adminaccount:localStorage.getItem("ms_username"),
+                        }),
+//                    {headers: {'Content-Type': 'contentType:"application/json"'}}
+                )
+                    .then (response => {
+                        if(response == null){
+                            return;
+                        }
+                        this.getData();
+                        this.$message.success('重置成功');
                     });
             },
-            /*保存分配信息*/
-            saveDistribute(){
-                this.distributeVisible = false;
-                console.log(this.form.id)
-                console.log(this.distributenames);
+            /*随机分配抽检员到抽检账号*/
+            randomlyassigned(){
+                this.randomVisible = true;
+            },
+            saverandom(){
+
+                this.$axios.post('/ssaccount/randomlyassigned',
+                    this.$qs.stringify(
+                        {
+                            adminaccount:localStorage.getItem("ms_username"),
+                            size:this.selectvalue,
+                        }),
+                )
+                    .then (response => {
+                        if(response == null){
+                            return;
+                        }
+                        this.getData();
+                        this.$message.success('随机分配成功');
+                    });
             }
         }
     };

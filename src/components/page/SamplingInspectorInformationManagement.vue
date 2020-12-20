@@ -32,12 +32,12 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
-                <el-table-column prop="sii_name" label="姓名"></el-table-column>
-                <el-table-column prop="sii_sex" label="性别"></el-table-column>
-                <el-table-column prop="sii_phone" label="手机号"></el-table-column>
-                <el-table-column prop="sampling_agency" label="所属抽检机构"></el-table-column>
-                <el-table-column prop="create_time" label="创建时间"></el-table-column>
-                <el-table-column prop="last_update_time" label="上次更新时间"></el-table-column>
+                <el-table-column sortable prop="sii_name" label="姓名"></el-table-column>
+                <el-table-column sortable prop="sii_sex" label="性别"></el-table-column>
+                <el-table-column sortable prop="sii_phone" label="手机号"></el-table-column>
+                <el-table-column sortable prop="sampling_agency" label="所属抽检机构"></el-table-column>
+                <el-table-column sortable prop="create_time" label="创建时间"></el-table-column>
+                <el-table-column sortable prop="last_update_time" label="上次更新时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -54,12 +54,13 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!--:page-sizes= "query.pageSize"-->
             <div class="pagination">
                 <el-pagination
                     background
                     layout="total, prev, pager, next"
                     :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
+                    :page-size= "query.pageSize"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -131,13 +132,14 @@ export default {
                 address: '',
                 name: '',
                 pageIndex: 1,
-                pageSize: 10
+                pageSize: 8
+//                pageSize: [100, 200, 300, 400]
             },
             tableData: [],
             multipleSelection: [],
             delList: [],
             editVisible: false,
-            pageTotal: 0,
+            pageTotal: 50,
             form: {},
             idx: -1,
             id: -1,
@@ -157,9 +159,12 @@ export default {
     methods: {
         //根据账号名获取抽检员信息表中的所有数据
         getData() {
+
             this.$axios.post('/siinformation/getallsiinformationbyadminaccount',
                 this.$qs.stringify(
                     {
+                        pageIndex:this.query.pageIndex,
+                        pageSize:this.query.pageSize,
                         adminaccount:localStorage.getItem('ms_username'),
                     })
             )
@@ -168,7 +173,8 @@ export default {
                         return;
                     }
                     //  请求成功，response为成功信息参数
-                    this.tableData = response.data.data;
+                    this.tableData = response.data.data.tableData;
+                    this.pageTotal = response.data.data.pageTotal
 //                    if (response.status>= 200 && response.status < 300) {
 //
 //                        //  请求成功，response为成功信息参数
@@ -268,6 +274,7 @@ export default {
                     // 双向数据绑定，不用再调用getData方法
                     this.$set(this.tableData, this.idx, this.form);
                     this.$message.success('修改成功！');
+//                    this.getData()
 //                    if (response.status>= 200 && response.status < 300) {
 //                        //  请求成功，response为成功信息参数
 //                        // 把table的idx行修改为form，不加也会修改。
@@ -279,6 +286,7 @@ export default {
 //                    }
                 });
         },
+        //添加
         addnewsiinformation(){
 
             this.$axios.post('/siinformation/addnewsiinformation',
@@ -313,7 +321,7 @@ export default {
         },
         // 分页导航
         handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
+          this.$set(this.query, 'pageIndex', val);
             this.getData();
         }
     }
