@@ -43,6 +43,11 @@ export default new Router({
                     meta: { title: '基本表单' }
                 },
                 {
+                    path: '/SamplingLibraryManagement',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
+                    meta: { title: '抽检库管理' }
+                },
+                {
                     path: '/sampling_account_management',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingAccountManagement.vue'),
                     meta: { title: '抽检账号管理',adminpermission:true}

@@ -68,7 +68,7 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+        <el-dialog  v-dialogDrag title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 <el-form-item label="姓名">
                     <el-input v-model="form.sii_name" :disabled="true"></el-input>
@@ -89,7 +89,7 @@
             </span>
         </el-dialog>
         <!-- 添加弹出框 -->
-        <el-dialog title="新增抽检员信息" :visible.sync="dialogFormVisible">
+        <el-dialog  v-dialogDrag title="新增抽检员信息" :visible.sync="dialogFormVisible">
             <el-form :model="addform"  :rules="rules">
                 <el-form-item prop="sii_name"label="姓名" :label-width="formLabelWidth" >
                     <el-input v-model="addform.sii_name" autocomplete="off"></el-input>
@@ -118,7 +118,7 @@
 <script>
 import { fetchData } from '../../api/index';
 export default {
-    name: 'basetable',
+    name: 'samplinginspectorinformation',
     data() {
         return {
             rules: {
@@ -267,6 +267,7 @@ export default {
             )
                 .then (response => {
                     if(response == null){
+                        this.getData();
                         return;
                     }
                     //  请求成功，response为成功信息参数

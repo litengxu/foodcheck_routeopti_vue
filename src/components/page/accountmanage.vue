@@ -44,7 +44,7 @@ import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-
 
 export default {
     components: {ElFormItem},
-    name: 'baseform',
+    name: 'accountmessage',
     data() {
         return {
             accountname: localStorage.getItem("ms_username"),

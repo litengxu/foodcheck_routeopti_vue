@@ -70,6 +70,10 @@ export default {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: 'tab选项卡'
+                }, {
+                    icon: 'el-icon-lx-cascades',
+                    index: 'SamplingLibraryManagement',
+                    title: '抽检库管理'
                 },{
                     icon: 'el-icon-lx-calendar',
                     index: '9',
@@ -86,7 +90,7 @@ export default {
                     ]
                 },
                 {
-                    icon: 'el-icon-lx-calendar',
+                    icon: 'el-icon-s-custom',
                     index: '3',
                     title: '用户相关',
                     subs: [

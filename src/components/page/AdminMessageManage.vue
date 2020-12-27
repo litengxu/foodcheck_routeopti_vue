@@ -10,7 +10,7 @@
         </div>
         <div class="container">
             <el-button type="primary"  @click="dialogFormVisible = true">添加管理员<i class="el-icon-plus el-icon--right"></i></el-button>
-            <el-dialog title="新增管理员账号" :visible.sync="dialogFormVisible">
+            <el-dialog  v-dialogDrag title="新增管理员账号" :visible.sync="dialogFormVisible">
                 <el-form :model="addform"  :rules="rules">
                     <el-form-item prop="name"label="账号" :label-width="formLabelWidth" >
                         <el-input v-model="addform.name" autocomplete="off"></el-input>
@@ -95,7 +95,7 @@ import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-
 
 export default {
     components: {ElFormItem},
-    name: 'baseform',
+    name: 'adminmessage',
     data() {
         return {
             rules: {
