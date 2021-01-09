@@ -34,7 +34,7 @@ const i18n = new VueI18n({
 // axios.defaults.baseURL ="http://localhost:7070/"; //开发环境
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title} | manage-system`;
     const rolename = localStorage.getItem('rolename');
     const  token = localStorage.getItem('token');
     if (!token && to.path !== '/login') {

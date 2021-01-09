@@ -43,9 +43,34 @@ export default new Router({
                     meta: { title: '基本表单' }
                 },
                 {
+                    path: '/sampling_inspection_plan_generation',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingInspectionPlanGeneration.vue'),
+                    meta: { title: '抽检计划生成' }
+                },
+                {
+                    path: '/sampling_plan_during_generation',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingPlanDuringGeneration.vue'),
+                    meta: { title: '生成中抽检计划'  }
+                },
+                {
+                    path: '/generated_sampling_plan',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
+                    meta: { title: '已生成抽检计划' }
+                },
+                {
                     path: '/SamplingLibraryManagement',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
                     meta: { title: '抽检库管理' }
+                },
+                {
+                    path: '/food_type_management',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/FoodTypeManagement.vue'),
+                    meta: { title: '食品类型管理' ,adminpermission:true}
+                },
+                {
+                    path: '/food_risk_value_control',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/FoodRiskValueControl.vue'),
+                    meta: { title: '食品风险值管控',permission: true }
                 },
                 {
                     path: '/sampling_account_management',
