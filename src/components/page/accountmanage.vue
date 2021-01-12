@@ -20,6 +20,16 @@
                     <el-form-item label="用户名"prop="username">
                         <el-input v-model="form.username" ></el-input>
                     </el-form-item>
+                    <el-form-item label="城市"prop="city">
+                        <el-select v-model="value" placeholder="请选择" style="width: 100%">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="上次登录">
                         <el-input v-model="form.lastlogintime" :disabled="true" value-format="yyyy-MM-dd"></el-input>
                     </el-form-item>
@@ -47,6 +57,41 @@ export default {
     name: 'accountmessage',
     data() {
         return {
+            options: [{
+                value: '杭州市',
+                label: '杭州市'
+            }, {
+                value: '嘉兴市',
+                label: '嘉兴市'
+            }, {
+                value: '湖州市',
+                label: '湖州市'
+            }, {
+                value: '绍兴市',
+                label: '绍兴市'
+            }, {
+                value: '宁波市',
+                label: '宁波市'
+            }, {
+                value: '台州市',
+                label: '台州市'
+            }, {
+                value: '温州市',
+                label: '温州市'
+            }, {
+                value: '金华市',
+                label: '金华市'
+            }, {
+                value: '衢州市',
+                label: '衢州市'
+            }, {
+                value: '丽水市',
+                label: '丽水市'
+            }, {
+                value: '舟山市',
+                label: '舟山市'
+            }],
+            value: '',
             accountname: localStorage.getItem("ms_username"),
             form: {
                 id:'',
@@ -55,8 +100,8 @@ export default {
                 username: '',
                 lastlogintime: '',
                 updatetime: '',
-                updateuser:''
-
+                updateuser:'',
+                city:''
             },
             rules: {
 
@@ -85,7 +130,8 @@ export default {
                     this.form.lastlogintime = response.data.data.last_login_time;
                     this.form.updatetime = response.data.data.update_time;
                     this.form.updateuser = response.data.data.update_user;
-
+                    this.form.city = response.data.data.city;
+                    this.value = response.data.data.city;
             })
         },
         onSubmit() {
@@ -103,7 +149,8 @@ export default {
                             id:this.form.id,
                             password:this.form.password,
                             username: this.form.username,
-                            whether_change_password:whether_change_password
+                            whether_change_password:whether_change_password,
+                            city:this.value
                         })
                         )
                         .then (response => {
