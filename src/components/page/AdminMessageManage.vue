@@ -21,6 +21,16 @@
                     <el-form-item prop="username"label="用户名" :label-width="formLabelWidth">
                         <el-input v-model="addform.username" autocomplete="off"></el-input>
                     </el-form-item>
+                    <el-form-item label="城市"prop="city" :label-width="formLabelWidth">
+                        <el-select v-model="value" label="请选择"  style="width: 100%">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item>
                         <el-switch
                                 v-model="addform.ifenabled"
@@ -98,16 +108,54 @@ export default {
     name: 'adminmessage',
     data() {
         return {
+            options: [{
+                value: '杭州市',
+                label: '杭州市'
+            }, {
+                value: '嘉兴市',
+                label: '嘉兴市'
+            }, {
+                value: '湖州市',
+                label: '湖州市'
+            }, {
+                value: '绍兴市',
+                label: '绍兴市'
+            }, {
+                value: '宁波市',
+                label: '宁波市'
+            }, {
+                value: '台州市',
+                label: '台州市'
+            }, {
+                value: '温州市',
+                label: '温州市'
+            }, {
+                value: '金华市',
+                label: '金华市'
+            }, {
+                value: '衢州市',
+                label: '衢州市'
+            }, {
+                value: '丽水市',
+                label: '丽水市'
+            }, {
+                value: '舟山市',
+                label: '舟山市'
+            }],
+            value: '',
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
                 name: [{ required: true, message: '请输入账户名', trigger: 'blur' }],
+                city: [{ required: true, message: '请输入默认城市', trigger: 'blur' }],
+
             },
             dialogFormVisible: false,
             addform: {
                 name:'',
                 password:'',
                 username:'',
+                city:'',
                 ifenabled: true,
                 iflocked: true,
             },
@@ -136,6 +184,7 @@ export default {
                         name:this.addform.name,
                         password:this.addform.password,
                         username: this.addform.username,
+                        city:this.value,
                         ifenabled: this.addform.ifenabled,
                         iflocked: this.addform.iflocked,
                     })

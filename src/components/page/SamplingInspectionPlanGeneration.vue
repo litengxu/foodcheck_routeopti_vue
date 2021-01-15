@@ -31,7 +31,7 @@
                 >开始生成抽检计划</el-button>
 
             </div>
-            <baidu-map class="bm-view" :center="center"  ak="GlotjjGuXh5dmWbQDwWoTBqVfWGE7qy2" :scroll-wheel-zoom="true" @ready="handler">
+            <baidu-map class="bm-view" :center="center"  ak="afzx0PGdTM3wlK9WrLqY3QhOdEhWr3Iz" :scroll-wheel-zoom="true" @ready="handler">
                 <!--比例尺控件-->
                 <bm-scale anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-scale>
                 <!--缩放控件-->
@@ -79,7 +79,7 @@
 
 
                         <div style="margin-top: 20px;margin-left: 20px">
-                            <span>选择此次抽检的食品类型</span>
+                            <span>选择此次抽检的食品类型(必选)</span>
                             <el-checkbox-group  v-model="typeoffoodselected">
                                 <el-checkbox style="margin-top: 20px" v-for="name in foodtypes" :label="name" :key="name.id" border>{{name.type_name}}</el-checkbox>
                             </el-checkbox-group>
@@ -87,10 +87,19 @@
 
 
                         <div style="margin-top: 20px;margin-left: 20px">
-                            <span>选择参与此次抽检的抽检账号</span>
+                            <span>选择参与此次抽检的抽检账号(必选)</span>
                             <el-checkbox-group v-model="selectedsamplingaccount">
                                 <el-checkbox style="margin-top: 20px"  v-for="name in samplingaccount" :label="name" :key="name.id" border>{{name.s_account}}</el-checkbox>
                             </el-checkbox-group>
+                        </div>
+
+                        <div style="margin-top: 20px;margin-left: 20px">
+                            <span>输入此次要抽检多少个商家(必选)</span>
+                            <el-input style="margin-top: 20px" v-model="numbers" placeholder="请输入此次要抽检多少个商家"></el-input>
+                        </div>
+                        <div style="margin-top: 20px;margin-left: 20px">
+                            <span>输入此次抽检的出发点(必选)</span>
+                            <el-input style="margin-top: 20px" v-model="starting_point" placeholder="请输入此次抽检的出发点"></el-input>
                         </div>
 
                     </el-form>
@@ -206,16 +215,25 @@
                     },
                 },
                 activeName: '',
+                /*选择此次展示的出行方式*/
                 travelmode:false,
+
                 drawer: false,
                 loading: false,
                 form:{},
                 timer: null,
+                /*可被选择的食品类型*/
                 foodtypes: {},
+                /*已被选择的食品类型*/
                 typeoffoodselected:[],
+                /*已被选择的抽检账号*/
                 selectedsamplingaccount:[],
-                samplingaccount:{}
-
+                /*可以参与抽检的抽检账号*/
+                samplingaccount:{},
+                /*此次抽检的抽检数目*/
+                numbers:'',
+                /*此次抽检的出发点*/
+                starting_point:"",
             };
         },
         created() {
@@ -281,13 +299,42 @@
             },
             /*提交数据*/
             startgenerating(){
-                console.log(this.typeoffoodselected)
-                for(var i=0;i<this.selectedsamplingaccount.length;i++){
-                    console.log(this.selectedsamplingaccount[i].id)
+                if(this.selectedsamplingaccount.length == 0 || this.typeoffoodselected.length == 0 || this.numbers ==null || this.numbers == "" || this.starting_point == null ){
+                    this.$message.error("请填选必选项！")
+                    return;
                 }
+                if(this.selectedsamplingaccount.length > this.numbers){
+                    this.$message.error("所选参加抽检的抽检账号数目需小于此次抽检的抽检商家数目")
+                    return;
+                }
+                var selectedsamplingaccountid = [];
+                var typeoffoodselectedid = [];
+
+                for(var i=0;i<this.selectedsamplingaccount.length;i++){
+                    selectedsamplingaccountid[i] = this.selectedsamplingaccount[i].id;
+                }
+                for(var i=0;i<this.typeoffoodselected.length;i++){
+                    typeoffoodselectedid[i] = this.typeoffoodselected[i].id;
+                }
+                this.$axios.post('/ssplan/generateplan',
+                    this.$qs.stringify(
+                        {
+                            selectedsamplingaccountid:selectedsamplingaccountid.toString(),
+                            typeoffoodselectedid:typeoffoodselectedid.toString(),
+                            numbers:this.numbers,
+                            starting_point:this.starting_point
+                        })
+                )
+                    .then (response => {
+                        if(response == null){
+                            return;
+                        }
+                    });
+
                 for(var i=0;i<this.typeoffoodselected.length;i++){
                     console.log(this.typeoffoodselected[i].id)
                 }
+
                 var plan= '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案' +
                     '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案';
                 const h = this.$createElement;
@@ -328,17 +375,7 @@
 
 <style scoped>
     .handle-box {
-        margin-bottom: 20px;
-    }
-    .handle-select {
-        width: 120px;
-    }
 
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-    .table {
         width: 100%;
         font-size: 14px;
     }
