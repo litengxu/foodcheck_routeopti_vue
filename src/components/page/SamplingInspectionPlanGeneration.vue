@@ -79,10 +79,20 @@
 
 
                         <div style="margin-top: 20px;margin-left: 20px">
-                            <span>选择此次抽检的食品类型(必选)</span>
-                            <el-checkbox-group  v-model="typeoffoodselected">
-                                <el-checkbox style="margin-top: 20px" v-for="name in foodtypes" :label="name" :key="name.id" border>{{name.type_name}}</el-checkbox>
-                            </el-checkbox-group>
+                            <span>选择此次抽检的食品类型数量(必选)</span>
+                                <a v-for="(name,index) in foodtypes">
+                                    <div style="width: 100%">
+                                        <el-select v-model="quantityvalue[index]" placeholder="请选择" style="margin-top: 20px">
+                                            <el-option
+                                                    v-for="item in quantity"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                        <a style="margin-top: 20px;margin-left: 20px">{{name.type_name}}</a>
+                                    </div>
+                                </a>
                         </div>
 
 
@@ -222,6 +232,20 @@
                 loading: false,
                 form:{},
                 timer: null,
+                quantity: [{
+                    value: '0',
+                    label: '0'
+                },{
+                    value: '1',
+                    label: '1'
+                }, {
+                    value: '2',
+                    label: '2'
+                }, {
+                    value: '3',
+                    label: '3'
+                }],
+                quantityvalue:[],
                 /*可被选择的食品类型*/
                 foodtypes: {},
                 /*已被选择的食品类型*/
@@ -272,6 +296,7 @@
 
                 this.foodtypes = []
                 this.samplingaccount = []
+                this.quantityvalue= []
                 this.$axios.post('/ssaccount/selectAllCanParticipatebyadminid',
                     this.$qs.stringify(
                         {
@@ -288,6 +313,7 @@
                         }
                         for(var i=0;i<response.data.data.listtype.length;i++){
                             this.foodtypes = response.data.data.listtype;
+                            this.quantityvalue[i] = 0;
 //                            this.foodtypes[i].foodtype = response.data.data.listtype[i].type_name;
 //                            this.foodtypes[i].id = response.data.data.listtype[i].id;
                         }
@@ -299,12 +325,17 @@
             },
             /*提交数据*/
             startgenerating(){
-                if(this.selectedsamplingaccount.length == 0 || this.typeoffoodselected.length == 0 || this.numbers ==null || this.numbers == "" || this.starting_point == null ){
+                if(this.selectedsamplingaccount.length == 0  || this.numbers ==null || this.numbers == "" || this.starting_point == null ){
                     this.$message.error("请填选必选项！")
                     return;
                 }
-                if(this.selectedsamplingaccount.length > this.numbers){
-                    this.$message.error("所选参加抽检的抽检账号数目需小于此次抽检的抽检商家数目")
+               var  basicSum = 0;
+                // 从基本数量数组中遍历计算总和
+                for (var i = 0; i < this.quantityvalue.length;i++){
+                    basicSum += this.quantityvalue[i];
+                }
+                if(basicSum >  this.numbers){
+                    this.$message.error("抽检商家数量应大于等于抽检食品数量")
                     return;
                 }
                 var selectedsamplingaccountid = [];
@@ -313,14 +344,15 @@
                 for(var i=0;i<this.selectedsamplingaccount.length;i++){
                     selectedsamplingaccountid[i] = this.selectedsamplingaccount[i].id;
                 }
-                for(var i=0;i<this.typeoffoodselected.length;i++){
-                    typeoffoodselectedid[i] = this.typeoffoodselected[i].id;
+                for(var i=0;i<this.foodtypes.length;i++){
+                    typeoffoodselectedid[i] = this.foodtypes[i].id;
                 }
                 this.$axios.post('/ssplan/generateplan',
                     this.$qs.stringify(
                         {
                             selectedsamplingaccountid:selectedsamplingaccountid.toString(),
                             typeoffoodselectedid:typeoffoodselectedid.toString(),
+                            quantityvalue:this.quantityvalue.toString(),
                             numbers:this.numbers,
                             starting_point:this.starting_point
                         })
@@ -331,9 +363,7 @@
                         }
                     });
 
-                for(var i=0;i<this.typeoffoodselected.length;i++){
-                    console.log(this.typeoffoodselected[i].id)
-                }
+
 
                 var plan= '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案' +
                     '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案';
