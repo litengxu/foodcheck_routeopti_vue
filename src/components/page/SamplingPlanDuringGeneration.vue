@@ -172,7 +172,9 @@
                     pageSize: 5,
                     pageTotal: 0
                 },
+                tag:"",
             };
+
         },
         created() {
             this.getData();
