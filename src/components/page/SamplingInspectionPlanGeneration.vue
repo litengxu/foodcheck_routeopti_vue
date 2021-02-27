@@ -31,37 +31,42 @@
                 >开始生成抽检计划</el-button>
 
             </div>
-            <baidu-map class="bm-view" :center="center"  ak="afzx0PGdTM3wlK9WrLqY3QhOdEhWr3Iz" :scroll-wheel-zoom="true" @ready="handler">
+            <baidu-map class="bm-view" :center="center"  ak="svq1mQqPx1vrCaI5r6GiId5pHj9bQ03G" :scroll-wheel-zoom="true" @ready="handler">
                 <!--比例尺控件-->
                 <bm-scale anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-scale>
                 <!--缩放控件-->
                 <bm-navigation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" ></bm-navigation>
                 <!--聚合动态添加的点坐标-->
                 <bm-marker-clusterer :averageCenter="true">
-                    <bm-marker v-for="marker in markers"  :key="marker.code" :position="{lng: marker.lng1, lat: marker.lat1}" @click="lookDetail(marker)"></bm-marker>
+                    <bm-marker v-for="marker in markers"   :position="{lng: marker[1], lat: marker[2]}">
+                        <bm-label :content="marker[0]" :labelStyle="{color: 'red', fontSize : '4px'}" :offset="{width: -35, height: 30}"/>
+                    </bm-marker>
                 </bm-marker-clusterer>
-                <bm-marker   :position="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" @click="lookDetail(marker)"></bm-marker>
-                <!--信息窗体-->
-                <!--<bm-info-window :position="{lng: infoWindow.info.lng1, lat: infoWindow.info.lat1}" :title="infoWindow.info.name" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">-->
-                    <!--<p><span class="left">抽检食品：</span><span class="right">{{infoWindow.info.name}}</span></p>-->
-                    <!--<p><span class="left">抽检人：</span><span class="right">{{infoWindow.info.name}}</span></p>-->
+                <!--<bm-marker   :position="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" @click="lookDetail(marker)"></bm-marker>-->
+              <!---->
+                <!--信息窗体 有bug 可能是图标重叠-->
+                <!--<bm-info-window :position="{lng: infoWindow.lng1, lat: infoWindow.lat}" :title="infoWindow.info.name" :show="infoWindow.show" @close="infoWindowClose" @open="infoWindowOpen">-->
+                    <!--<p><span class="left">抽检地点：</span><span class="right">{{infoWindow.info.samplingaddress}}</span></p>-->
+                    <!--&lt;!&ndash;<p><span class="left">抽检人：</span><span class="right">{{infoWindow.info.name}}</span></p>&ndash;&gt;-->
                 <!--</bm-info-window>-->
-                <bm-label v-for="marker in markers" :content="marker.ssl_name1" :position="{lng: marker.lng1, lat: marker.lat1}" :labelStyle="{color: 'red', fontSize : '4px'}" :title="marker.ssl_name1"/>
-                <bm-label  :content="markers[markers.length-1].ssl_name2" :position="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" :labelStyle="{color: 'red', fontSize : '4px'}" :title="markers[markers.length-1].ssl_name1"/>
+                <!--<bm-label v-for="marker in markers" :content="marker[0]" :position="{lng: marker[1], lat: marker[2]}" :labelStyle="{color: 'red', fontSize : '4px'}" :title="marker[0]"/>-->
+
+                <!--<bm-label  :content="markers[markers.length-1][3]" :position="{lng: markers[markers.length-1][4], lat: markers[markers.length-1][5]}" :labelStyle="{color: 'red', fontSize : '4px'}" :title="markers[markers.length-1].ssl_name1"/>-->
 
                 <div v-if="travelmode">
-                <bm-transit v-for="marker  in markers" :start="{lng: marker.lng1, lat: marker.lat1}" :end="{lng: marker.lng2, lat: marker.lat2}" :auto-viewport="true" :panel="false">
-                </bm-transit>
-                <bm-transit  :start="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" :end="{lng: markers[0].lng1, lat: markers[0].lat1}" :auto-viewport="true" :panel="false">
-                </bm-transit>
+                    <bm-transit v-for="marker  in markers" :start="{lng: marker[1], lat: marker[2]}" :end="{lng: marker[4], lat: marker[5]}" :auto-viewport="true" :panel="false">
+                    </bm-transit>
+
+                    <!--<bm-transit  :start="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" :end="{lng: markers[0].lng1, lat: markers[0].lat1}" :auto-viewport="true" :panel="false">-->
+                    <!--</bm-transit>-->
                 </div>
                 <div v-if="!travelmode">
-                    <bm-driving v-for="marker  in markers" :start="{lng: marker.lng1, lat: marker.lat1}" :end="{lng: marker.lng2, lat: marker.lat2}" :auto-viewport="true" :panel="false">
+                    <bm-driving v-for="marker  in markers" :start="{lng: marker[1], lat: marker[2]}" :end="{lng: marker[4], lat: marker[5]}" :auto-viewport="true" :panel="false">
                     </bm-driving>
-                    <bm-driving  :start="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" :end="{lng: markers[0].lng1, lat: markers[0].lat1}" :auto-viewport="true" :panel="false">
-                    </bm-driving>
+
+                    <!--<bm-driving  :start="{lng: markers[markers.length-1].lng2, lat: markers[markers.length-1].lat2}" :end="{lng: markers[0].lng1, lat: markers[0].lat1}" :auto-viewport="true" :panel="false">-->
+                    <!--</bm-driving>-->
                 </div>
-                    <!--<bm-driving start="北京林业大学" end="五道口" :auto-viewport="true"></bm-driving>-->
             </baidu-map>
         </div>
 
@@ -189,39 +194,40 @@
                 }],
                 center: '杭州',
 //                zoom: 3,
+
                 markers:[
-                    {
-                        ssl_name1:"1",
-                        lng1:116.409443,
-                        lat1:39.917149,
-                        ssl_name2:"2",
-                        lng2:116.509443,
-                        lat2:39.817149
-                    }
-                    ,{
-                        ssl_name1:"2",
-                        lng2:116.609443,
-                        lat2:39.717149,
-                        ssl_name2:"3",
-                        lng1:116.509443,
-                        lat1:39.817149
-                    }
-                    ,{
-                        ssl_name1:"3",
-                        lng1:116.609443,
-                        lat1:39.717149,
-                        ssl_name2:"4",
-                        lng2:116.709443,
-                        lat2:39.617149
-                    }
+                    // {
+                    //     ssl_name1:"1",
+                    //     lng1:116.409443,
+                    //     lat1:39.917149,
+                    //     ssl_name2:"2",
+                    //     lng2:116.509443,
+                    //     lat2:39.817149
+                    // }
+                    // ,{
+                    //     ssl_name1:"2",
+                    //     lng2:116.609443,
+                    //     lat2:39.717149,
+                    //     ssl_name2:"3",
+                    //     lng1:116.509443,
+                    //     lat1:39.817149
+                    // }
+                    // ,{
+                    //     ssl_name1:"3",
+                    //     lng1:116.609443,
+                    //     lat1:39.717149,
+                    //     ssl_name2:"4",
+                    //     lng2:116.709443,
+                    //     lat2:39.617149
+                    // }
                     ],
                 infoWindow: {
                     lng: 0,
                     lat: 0,
                     show: false,
                     info:{
-                        samplingfoods: 0.64,
-                        samplinginspector: "440300A055",
+                        samplingaddress: '',
+                        // samplinginspector: "440300A055",
                     },
                 },
                 activeName: '',
@@ -282,14 +288,16 @@
             },
             //查看详情
             lookDetail(data, target){
-                this.infoWindow.show =true;
-                this.infoWindow.info=data;
-                this.activeName = data.name;
-                //为弹窗口标题添加title
-                this.$nextTick(()=>{
-                    var win=document.querySelector(".BMap_bubble_title");
-                    win.title = this.activeName;
-                })
+                // this.infoWindow.show =true;
+                // this.infoWindow.info.samplingaddress=data[0];
+                // this.infoWindow.lng = data[1]
+                // this.infoWindow.lat = data[2]
+                // this.activeName = data[0];
+                // //为弹窗口标题添加title
+                // this.$nextTick(()=>{
+                //     var win=document.querySelector(".BMap_bubble_title");
+                //     win.title = this.activeName;
+                // })
             },
             /*弹出右边栏*/
             popupdrawer(){
@@ -347,6 +355,7 @@
                 for(var i=0;i<this.foodtypes.length;i++){
                     typeoffoodselectedid[i] = this.foodtypes[i].id;
                 }
+                var _this = this
                 this.$axios.post('/ssplan/generateplan',
                     this.$qs.stringify(
                         {
@@ -358,22 +367,24 @@
                         })
                 )
                     .then (response => {
+
                         if(response == null){
                             return;
                         }
+                        _this.markers = []
+                        _this.markers = response.data.data.route
+                        var  message = response.data.data.message
+                        // var message = "12312"+"\n"+"dasdasd000000000000000000000000000000000000"+"\n"+"sadasd"
+                        const h = this.$createElement;
+                        this.$notify({
+                            title: '抽检计划生成成功',
+                            message: h('i', { style: 'color: teal'}, message),
+                            type: 'success',
+                            dangerouslyUseHTMLString:true,
+                            duration: 0
+                        });
                     });
-
-
-
-                var plan= '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案' +
-                    '这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案这是提示文案';
-                const h = this.$createElement;
-                this.$notify({
-                    title: '抽检计划生成成功',
-                    message: h('i', { style: 'color: teal'}, plan),
-                    type: 'success',
-                    duration: 0
-                });
+                this.selectedsamplingaccount = [];
             },
             /*处理事件提交以及加载层*/
             handleClose(done) {
@@ -421,10 +432,19 @@
         width: 40px;
         height: 40px;
     }
+
 </style>
 <style>
     .bm-view {
         width: 100%;
         height: 670px;
+    }
+    .el-drawer__body {
+        overflow: auto;
+    }
+    .el-notification {
+        white-space:pre-wrap !important;
+        /*word-wrap: break-word;*/
+        /*word-break: break-all;*/
     }
 </style>
