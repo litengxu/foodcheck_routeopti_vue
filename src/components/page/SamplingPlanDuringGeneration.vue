@@ -182,7 +182,7 @@
         methods: {
             //根据账号名获取抽检员信息表中的所有数据
             getData() {
-                this.$axios.post('/sstype/findcustomizecategories',
+                this.$axios.post('/ssplan/findplan',
                     this.$qs.stringify(
                         {
                             pageIndex:this.query.pageIndex,
@@ -193,7 +193,11 @@
                         if(response == null){
                             return;
                         }
-                        this.tableData = response.data.data.list;
+                        for(var i=0;i<response.data.data.list.length;i++){
+                            var  task_json = response.data.data.list[0].task_json;
+                            task_json = JSON.parse(task_json)
+                            this.tableData[i] = task_json;
+                        }
                         this.pageTotal = response.data.data.total
                     });
             },

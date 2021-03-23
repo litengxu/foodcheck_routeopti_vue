@@ -54,7 +54,7 @@ export default new Router({
                 },
                 {
                     path: '/generated_sampling_plan',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/GeneratedSamplingPlan.vue'),
                     meta: { title: '已生成抽检计划' }
                 },
                 {

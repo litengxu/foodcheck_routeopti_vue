@@ -382,6 +382,7 @@
                         if(response == null){
                             return;
                         }
+                        console.log(response);
                         this.foodtypes = [];
                         this.tableData = response.data.data.sysSamplingLibraries;
                         for(var i=0;i<response.data.data.foodTypes.length;i++){
