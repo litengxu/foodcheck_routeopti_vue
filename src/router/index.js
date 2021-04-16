@@ -10,7 +10,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/sampling_inspection_plan_generation'
         },
         {
             path: '/',
@@ -81,6 +81,11 @@ export default new Router({
                     path: '/sampling_inspector_information_management',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingInspectorInformationManagement.vue'),
                     meta: { title: '抽检员信息管理',adminpermission:true}
+                },
+                {
+                    path: '/sampling_account_management_history',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingAccountManagement_history.vue'),
+                    meta: { title: '抽检账号历史信息管理',adminpermission:true}
                 },
                 {
                     path: '/admin_account_manage',

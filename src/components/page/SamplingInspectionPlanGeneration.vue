@@ -102,7 +102,7 @@
 
 
                         <div style="margin-top: 20px;margin-left: 20px">
-                            <span>选择参与此次抽检的抽检账号(必选)</span>
+                            <span>选择参与此次抽检的抽检主体(必选)</span>
                             <el-checkbox-group v-model="selectedsamplingaccount">
                                 <el-checkbox style="margin-top: 20px"  v-for="name in samplingaccount" :label="name" :key="name.id" border>{{name.s_account}}</el-checkbox>
                             </el-checkbox-group>
@@ -121,7 +121,7 @@
                     <div class="demo-drawer__footer" style="margin-top: 20px;margin-left: 20px" >
                         <el-button @click="cancelForm">取 消</el-button>
                         <!--<el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>-->
-                        <el-button type="primary" @click="startgenerating">开始生成</el-button>
+                        <el-button type="primary" @click="startgenerating" v-loading.fullscreen.lock="fullscreenLoading">开始生成</el-button>
                     </div>
                 </div>
             </div>
@@ -264,6 +264,8 @@
                 numbers:'',
                 /*此次抽检的出发点*/
                 starting_point:"",
+
+                fullscreenLoading:false
             };
         },
         created() {
@@ -346,6 +348,7 @@
                     this.$message.error("抽检商家数量应大于等于抽检食品数量")
                     return;
                 }
+                this.fullscreenLoading = true
                 var selectedsamplingaccountid = [];
                 var typeoffoodselectedid = [];
 
@@ -376,6 +379,7 @@
                         var  message = response.data.data.message
                         // var message = "12312"+"\n"+"dasdasd000000000000000000000000000000000000"+"\n"+"sadasd"
                         const h = this.$createElement;
+                        _this.fullscreenLoading = false
                         this.$notify({
                             title: '抽检计划生成成功',
                             message: h('i', { style: 'color: teal'}, message),
@@ -383,6 +387,7 @@
                             dangerouslyUseHTMLString:true,
                             duration: 0
                         });
+
                     });
                 this.selectedsamplingaccount = [];
             },

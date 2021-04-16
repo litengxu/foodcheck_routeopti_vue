@@ -32,12 +32,18 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
+                <el-table-column sortable prop="sii_account" label="账号"></el-table-column>
+                <el-table-column sortable prop="sii_password" label="密码"></el-table-column>
                 <el-table-column sortable prop="sii_name" label="姓名"></el-table-column>
                 <el-table-column sortable prop="sii_sex" label="性别"></el-table-column>
                 <el-table-column sortable prop="sii_phone" label="手机号"></el-table-column>
                 <el-table-column sortable prop="sampling_agency" label="所属抽检机构"></el-table-column>
-                <el-table-column sortable prop="create_time" label="创建时间"></el-table-column>
-                <el-table-column sortable prop="last_update_time" label="上次更新时间"></el-table-column>
+                <el-table-column sortable prop="create_time" label="创建时间">
+                    <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.create_time)}}</span>
+                </el-table-column>
+                <el-table-column sortable prop="last_update_time" label="上次更新时间">
+                    <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.last_update_time)}}</span>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -94,6 +100,12 @@
                 <el-form-item prop="sii_name"label="姓名" :label-width="formLabelWidth" >
                     <el-input v-model="addform.sii_name" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item prop="sii_account"label="账号" :label-width="formLabelWidth" >
+                    <el-input v-model="addform.sii_account" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item prop="sii_password"label="密码" :label-width="formLabelWidth" >
+                    <el-input v-model="addform.sii_password" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item  prop="sii_sex"label="性别" :label-width="formLabelWidth">
                     <el-select v-model="addform.sii_sex" placeholder="请选择抽检员性别">
                         <el-option label="男" value="男"></el-option>
@@ -123,6 +135,8 @@ export default {
         return {
             rules: {
                 sii_name: [{ required: true, message: '请输入抽检员姓名', trigger: 'blur' }],
+                sii_account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+                sii_password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
                 sii_sex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
                 sii_phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
                 sampling_agency: [{ required: true, message: '请输入抽检员所属抽检机构', trigger: 'blur' }],
@@ -132,7 +146,7 @@ export default {
                 address: '',
                 name: '',
                 pageIndex: 1,
-                pageSize: 8
+                pageSize: 6
 //                pageSize: [100, 200, 300, 400]
             },
             tableData: [],
@@ -146,6 +160,8 @@ export default {
             dialogFormVisible: false,
             addform: {
                 sii_name:'',
+                sii_account:'',
+                sii_password:'',
                 sii_sex:'',
                 sii_phone:'',
                 sampling_agency: "",
@@ -295,6 +311,8 @@ export default {
                     {
                         adminaccount:localStorage.getItem('ms_username'),
                         sii_name:this.addform.sii_name,
+                        sii_account:this.addform.sii_account,
+                        sii_password:this.addform.sii_password,
                         sii_sex:this.addform.sii_sex,
                         sii_phone: this.addform.sii_phone,
                         sampling_agency: this.addform.sampling_agency,
@@ -324,7 +342,31 @@ export default {
         handlePageChange(val) {
           this.$set(this.query, 'pageIndex', val);
             this.getData();
-        }
+        },
+        //时间对象处理
+        dateFormat(fmt, date) {
+            let ret="";
+            date=new Date(date);
+            const opt = {
+                'Y+': date.getFullYear().toString(), // 年
+                'm+': (date.getMonth() + 1).toString(), // 月
+                'd+': date.getDate().toString(), // 日
+                'H+': date.getHours().toString(), // 时
+                'M+': date.getMinutes().toString(), // 分
+                'S+': date.getSeconds().toString() // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            }
+            for (let k in opt) {
+                ret = new RegExp('(' + k + ')').exec(fmt)
+                if (ret) {
+                    fmt = fmt.replace(
+                        ret[1],
+                        ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0')
+                    )
+                }
+            }
+            return fmt
+        },
     }
 };
 </script>

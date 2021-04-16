@@ -60,7 +60,7 @@
                                 <div class="grid-cont-right">
                                     <div class="grid-num">5000</div>
                                     <div>数量</div>
-                                    <button class="btn btn-lg btn-primary btn-block"  @click="delete1()">测试</button>
+                                    <el_button class="btn btn-lg btn-primary btn-block"  @click="delete1()" v-loading.fullscreen.lock="fullscreenLoading">测试</el_button>
                                 </div>
                             </div>
                         </el-card>
@@ -117,6 +117,7 @@ export default {
     name: 'dashboard',
     data() {
         return {
+            fullscreenLoading: false,
             name: localStorage.getItem('ms_username'),
             rolename:localStorage.getItem('rolename'),
             todoList: [
@@ -248,18 +249,28 @@ export default {
             });
         },
         delete1() {
-                this.$axios.get('/siinformation/test',{
+            this. fullscreenLoading=true
+                this.$axios.get('/siinformation/getallsiinformation',{
 
                 }).then(response => {
 //                            请求成功，response为成功信息参数
                         if(response.data.errorCode == 200){
                                 console.log(response)
+
                                 this.$message.success('成功');
                          }
                         else {
                             console.log(response.data);//请求失败，response为失败信息
                         }
+                    this. fullscreenLoading=false
                     });
+
+        },
+        test(){
+
+            setTimeout(() => {
+                this.fullscreenLoading = false;
+            }, 2000);
         }
         // handleListener() {
         //     bus.$on('collapse', this.handleBus);

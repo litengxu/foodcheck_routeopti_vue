@@ -14,7 +14,7 @@
                         icon="el-icon-tickets"
                         class="handle-del mr10"
                         @click="sixteen_categories"
-                >查看16大类食品类型</el-button>
+                >查看大类食品类型</el-button>
                 <el-button
                     type="primary"
                     icon="el-icon-plus"
@@ -85,7 +85,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="十六大类食品类型" :visible.sync="sixteencategoriesVisible">
+        <el-dialog title="大类食品类型" :visible.sync="sixteencategoriesVisible">
 
             <el-table
                     :data="sixteencategoriesdata"
@@ -169,7 +169,7 @@
                     address: '',
                     name: '',
                     pageIndex: 1,
-                    pageSize: 5,
+                    pageSize: 10,
                     pageTotal: 0
                 },
             };
@@ -263,7 +263,7 @@
                             return;
                         }
                         this.sixteencategoriesdata = response.data.data;
-                        this.sixteencategoriesquery.pageTotal = 16;
+                        this.sixteencategoriesquery.pageTotal = 31;
                     });
             },
             /*exce处理进程弹出层分页*/

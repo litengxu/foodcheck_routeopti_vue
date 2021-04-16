@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">抽检计划生成与路径优化系统</div>
+        <div class="logo"style="width: 900px">基于动态风险值的食品抽检计划生成及时变TSP路径优化系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -15,18 +15,18 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <div class="btn-bell">
-                    <el-tooltip
-                        effect="dark"
-                        :content="message?`有${message}条未读消息`:`消息中心`"
-                        placement="bottom"
-                    >
-                        <router-link to="/tabs">
-                            <i class="el-icon-bell"></i>
-                        </router-link>
-                    </el-tooltip>
-                    <span class="btn-bell-badge" v-if="message"></span>
-                </div>
+                <!--<div class="btn-bell">-->
+                    <!--<el-tooltip-->
+                        <!--effect="dark"-->
+                        <!--:content="message?`有${message}条未读消息`:`消息中心`"-->
+                        <!--placement="bottom"-->
+                    <!--&gt;-->
+                        <!--<router-link to="/tabs">-->
+                            <!--<i class="el-icon-bell"></i>-->
+                        <!--</router-link>-->
+                    <!--</el-tooltip>-->
+                    <!--<span class="btn-bell-badge" v-if="message"></span>-->
+                <!--</div>-->
                 <!-- 用户头像 -->
                 <div class="user-avator">
                     <img src="../../assets/img/img.jpg" />

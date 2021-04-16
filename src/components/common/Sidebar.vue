@@ -56,11 +56,11 @@ export default {
         return {
             collapse: false,
             items: [
-                {
-                    icon: 'el-icon-lx-home',
-                    index: 'dashboard',
-                    title: '系统首页'
-                },
+//                {
+//                    icon: 'el-icon-lx-home',
+//                    index: 'dashboard',
+//                    title: '系统首页'
+//                },
 //                {
 //                    icon: 'el-icon-lx-cascades',
 //                    index: 'table',
@@ -81,10 +81,10 @@ export default {
                     index: 'sampling_plan_management',
                     title: '抽检计划管理',
                     subs: [
-                                {
-                                    index: 'sampling_plan_during_generation',
-                                    title: '生成中抽检计划'
-                                },
+//                                {
+//                                    index: 'sampling_plan_during_generation',
+//                                    title: '生成中抽检计划'
+//                                },
                                 {
                                     index: 'generated_sampling_plan',
                                     title: '已生成的抽检计划'
@@ -117,12 +117,23 @@ export default {
                     subs: [
                         {
                             index: 'sampling_account_management',
-                            title: '抽检账号管理'
+                            title: '抽检主体管理'
                         },
                         {
                             index: 'sampling_inspector_information_management',
                             title: '抽检员信息管理'
                         },
+                    ]
+                },
+                {
+                    icon: 'el-icon-s-data',
+                    index: 'history_management',
+                    title: '历史信息查看',
+                    subs: [
+                        {
+                            index: 'sampling_account_management_history',
+                            title: '抽检主体历史信息查看'
+                        }
                     ]
                 },
                 {

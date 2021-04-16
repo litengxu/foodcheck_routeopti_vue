@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 抽检账号管理
+                    <i class="el-icon-lx-cascades"></i> 抽检主体管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -14,19 +14,19 @@
                         icon="el-icon-plus"
                         class="handle-del mr10"
                         @click="dialogFormVisible = true"
-                >添加新的抽检账号</el-button>
+                >添加新的抽检主体</el-button>
                 <el-button
                         type="primary"
                         icon="el-icon-refresh"
                         class="handle-del mr10"
                         @click="resetaccount()"
-                >重置抽检员到抽检账号的分配</el-button>
+                >重置抽检员到抽检主体的分配</el-button>
                 <el-button
                         type="primary"
                         icon="el-icon-magic-stick"
                         class="handle-del mr10"
                         @click="randomlyassigned()"
-                >随机分配抽检员到抽检账号</el-button>
+                >随机分配抽检员到抽检主体</el-button>
             </div>
             <!--基本信息-->
             <el-table
@@ -39,8 +39,8 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
-                <el-table-column sortable prop="s_account" label="账号"></el-table-column>
-                <el-table-column prop="s_password" label="密码"></el-table-column>
+                <el-table-column sortable prop="s_account" label="抽检主体名称"></el-table-column>
+                <!--<el-table-column prop="s_password" label="密码"></el-table-column>-->
                 <el-table-column sortable prop="s_username" label="用户名"></el-table-column>
                 <!--<el-table-column prop="sampling_inspector_ids" label="分配的抽检员id信息"></el-table-column>-->
                 <el-table-column sortable prop="sampling_inspector_names" label="分配的抽检员姓名"></el-table-column>
@@ -54,8 +54,13 @@
                     </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column sortable prop="last_update_time" label="上次更新时间"></el-table-column>
-                <el-table-column sortable prop="create_time" label="创建时间"></el-table-column>
+                <el-table-column sortable prop="last_update_time" label="上次更新时间">
+                    <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.last_update_time)}}</span>
+                </el-table-column>
+
+                <el-table-column sortable prop="create_time" label="创建时间">
+                    <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.create_time)}}</span>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -92,12 +97,12 @@
         <!-- 编辑弹出框 -->
         <el-dialog v-dialogDrag title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="账号">
-                    <el-input v-model="form.s_account" :disabled="true"></el-input>
+                <el-form-item label="主体名称">
+                    <el-input v-model="form.s_account"  :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.s_password"></el-input>
-                </el-form-item>
+                <!--<el-form-item label="密码">-->
+                    <!--<el-input v-model="form.s_password"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item label="用户名">
                     <el-input v-model="form.s_username"></el-input>
                 </el-form-item>
@@ -105,7 +110,7 @@
                     <!--<el-input v-model="form.sampling_inspector_ids"></el-input>-->
                 <!--</el-form-item>-->
                 <el-form-item label="分配的抽检员姓名">
-                    <el-input v-model="form.sampling_inspector_names"></el-input>
+                    <el-input v-model="form.sampling_inspector_names" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="是否参与抽检">
                     <el-switch
@@ -123,12 +128,12 @@
         <!-- 添加弹出框 -->
         <el-dialog v-dialogDrag title="新增抽检员信息" :visible.sync="dialogFormVisible">
             <el-form :model="addform"  :rules="rules">
-                <el-form-item prop="s_account"label="账号" :label-width="formLabelWidth" >
+                <el-form-item prop="s_account"label="主体" :label-width="formLabelWidth" >
                     <el-input v-model="addform.s_account" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item prop="s_password"label="密码" :label-width="formLabelWidth">
-                    <el-input v-model="addform.s_password" autocomplete="off"></el-input>
-                </el-form-item>
+                <!--<el-form-item prop="s_password"label="密码" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="addform.s_password" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
                 <el-form-item prop="s_username"label="用户名" :label-width="formLabelWidth">
                     <el-input v-model="addform.s_username" autocomplete="off"></el-input>
                 </el-form-item>
@@ -147,7 +152,7 @@
             </div>
         </el-dialog>
         <!--分配抽检员弹出框-->
-        <el-dialog v-dialogDrag title="分配抽检员到此账号" :visible.sync="distributeVisible" width="30%">
+        <el-dialog v-dialogDrag title="分配抽检员到此主体" :visible.sync="distributeVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
                 <el-form-item label="已分配">
                     <el-checkbox v-model="checked"  v-for="name in havedistributenames" :label="name" :key="name" disabled>{{name}}</el-checkbox>
@@ -164,7 +169,7 @@
             </span>
         </el-dialog>
         <!--随机分配弹出框-->
-        <el-dialog  v-dialogDrag title="选择每个抽检账号分配抽检员的数目" :visible.sync="randomVisible" width="30%">
+        <el-dialog  v-dialogDrag title="选择每个抽检主体分配抽检员的数目" :visible.sync="randomVisible" width="30%">
         <el-form ref="form" :model="form" label-width="70px">
             <el-select v-model="selectvalue" placeholder="请选择">
                 <el-option
@@ -192,9 +197,9 @@
         data() {
             return {
                 rules: {
-                    s_account: [{ required: true, message: '请输入抽检账号', trigger: 'blur' }],
+                    s_account: [{ required: true, message: '请输入抽检主体', trigger: 'blur' }],
                     s_password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-                    s_username: [{ required: true, message: '请输入抽检账号用户名', trigger: 'blur' }],
+                    s_username: [{ required: true, message: '请输入抽检主体用户名', trigger: 'blur' }],
                 },
                 formLabelWidth: '70px',
                 query: {
@@ -217,7 +222,7 @@
                 dialogFormVisible: false,
                 addform: {
                     s_account:'',
-                    s_password:'',
+                    s_password:'123456',
                     s_username:'',
                     whether_participate: true,
                 },
@@ -506,7 +511,31 @@
                         this.getData();
                         this.$message.success('随机分配成功');
                     });
-            }
+            },
+            //时间对象处理
+            dateFormat(fmt, date) {
+                let ret="";
+                date=new Date(date);
+                const opt = {
+                    'Y+': date.getFullYear().toString(), // 年
+                    'm+': (date.getMonth() + 1).toString(), // 月
+                    'd+': date.getDate().toString(), // 日
+                    'H+': date.getHours().toString(), // 时
+                    'M+': date.getMinutes().toString(), // 分
+                    'S+': date.getSeconds().toString() // 秒
+                    // 有其他格式化字符需求可以继续添加，必须转化成字符串
+                }
+                for (let k in opt) {
+                    ret = new RegExp('(' + k + ')').exec(fmt)
+                    if (ret) {
+                        fmt = fmt.replace(
+                            ret[1],
+                            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0')
+                        )
+                    }
+                }
+                return fmt
+            },
         }
     };
 </script>
