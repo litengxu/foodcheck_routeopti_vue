@@ -96,6 +96,18 @@
                                 disable-transitions>{{scope.row.state}}</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作" width="80" align="center">
+                    <template slot-scope="scope">
+
+                        <el-button
+                                type="text"
+                                icon="el-icon-delete"
+                                class="red"
+                                @click="handleDelete(scope.$index, scope.row)"
+                        >删除</el-button>
+
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -164,10 +176,10 @@
                         })
                 )
                     .then (response => {
+                        console.log(response)
                         if(response == null){
                             return;
                         }
-                        console.log(response)
 //                        String类型的json串 转 json
                         for(var i=0;i<response.data.data.list.length;i++){
                             var  task_json = response.data.data.list[i].task_json;
@@ -193,6 +205,7 @@
                                 }
                             }
                             task_json.foodtypes = foodtypes
+                            task_json.id = response.data.data.list[i].id
                             temp[i] = task_json;
 //                            _this.tableData[i] = task_json;
 
@@ -207,6 +220,32 @@
 
 
 
+            },
+            // 删除操作
+            handleDelete(index, row) {
+                // 二次确认删除
+                this.$confirm('确定要删除吗？（已完成任务不允许删除）', '提示', {
+                    type: 'warning'
+                })
+                    .then(() => {
+
+                        this.$axios.post('/ssplan/deleteplan',
+                            this.$qs.stringify(
+                                {
+                                    id: row.id,
+                                })
+                           )
+                            .then (response => {
+                                if(response == null){
+                                    return;
+                                }
+                                this.$message.success('删除成功');
+                                this.tableData.splice(index, 1);
+                            });
+
+
+                    })
+                    .catch(() => {});
             },
             seecompleted(){
                 this.completeorundo = 1

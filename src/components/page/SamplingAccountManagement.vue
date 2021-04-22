@@ -44,16 +44,16 @@
                 <el-table-column sortable prop="s_username" label="用户名"></el-table-column>
                 <!--<el-table-column prop="sampling_inspector_ids" label="分配的抽检员id信息"></el-table-column>-->
                 <el-table-column sortable prop="sampling_inspector_names" label="分配的抽检员姓名"></el-table-column>
-                <el-table-column label="是否参与抽检" align="center">
-                    <template slot-scope="scope">
-                    <el-switch
-                            v-model="scope.row.whether_participate"
-                            :disabled="true"
-                            active-text="参与"
-                            inactive-text="不参与">
-                    </el-switch>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="是否参与抽检" align="center">-->
+                    <!--<template slot-scope="scope">-->
+                    <!--<el-switch-->
+                            <!--v-model="scope.row.whether_participate"-->
+                            <!--:disabled="true"-->
+                            <!--active-text="参与"-->
+                            <!--inactive-text="不参与">-->
+                    <!--</el-switch>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column sortable prop="last_update_time" label="上次更新时间">
                     <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.last_update_time)}}</span>
                 </el-table-column>
@@ -112,13 +112,13 @@
                 <el-form-item label="分配的抽检员姓名">
                     <el-input v-model="form.sampling_inspector_names" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="是否参与抽检">
-                    <el-switch
-                            v-model="form.whether_participate"
-                            active-text="参与"
-                            inactive-text="不参与">
-                    </el-switch>
-                </el-form-item>
+                <!--<el-form-item label="是否参与抽检">-->
+                    <!--<el-switch-->
+                            <!--v-model="form.whether_participate"-->
+                            <!--active-text="参与"-->
+                            <!--inactive-text="不参与">-->
+                    <!--</el-switch>-->
+                <!--</el-form-item>-->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
