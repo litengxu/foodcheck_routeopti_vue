@@ -83,6 +83,11 @@ export default new Router({
                     meta: { title: '抽检员信息管理',adminpermission:true}
                 },
                 {
+                    path: '/ask_for_leave_management',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/AskForLeaveManagement.vue'),
+                    meta: { title: '抽检员请假管理',adminpermission:true}
+                },
+                {
                     path: '/sampling_account_management_history',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/SamplingAccountManagement_history.vue'),
                     meta: { title: '抽检账号历史信息管理',adminpermission:true}

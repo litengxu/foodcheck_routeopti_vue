@@ -123,6 +123,10 @@ export default {
                             index: 'sampling_inspector_information_management',
                             title: '抽检员信息管理'
                         },
+                        {
+                            index: 'ask_for_leave_management',
+                            title: '抽检员请假管理'
+                        },
                     ]
                 },
                 {

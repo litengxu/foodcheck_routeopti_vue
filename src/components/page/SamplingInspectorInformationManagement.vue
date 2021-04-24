@@ -34,6 +34,16 @@
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
                 <el-table-column sortable prop="sii_account" label="账号"></el-table-column>
                 <el-table-column sortable prop="sii_password" label="密码"></el-table-column>
+                <el-table-column label="状态" align="center">
+                    <template slot-scope="scope">
+                        <el-switch
+                            v-model="scope.row.leave_status!=2"
+                            :disabled="true"
+                            active-text="在岗"
+                            inactive-text="请假">
+                        </el-switch>
+                    </template>
+                </el-table-column>
                 <el-table-column sortable prop="sii_name" label="姓名"></el-table-column>
                 <el-table-column sortable prop="sii_sex" label="性别"></el-table-column>
                 <el-table-column sortable prop="sii_phone" label="手机号"></el-table-column>
@@ -41,6 +51,7 @@
                 <el-table-column sortable prop="create_time" label="创建时间">
                     <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.create_time)}}</span>
                 </el-table-column>
+
                 <el-table-column sortable prop="last_update_time" label="上次更新时间">
                     <span slot-scope="scope">{{dateFormat('YYYY-mm-dd HH:MM',scope.row.last_update_time)}}</span>
                 </el-table-column>
@@ -87,6 +98,10 @@
                 </el-form-item>
                 <el-form-item label="所属抽检机构">
                     <el-input v-model="form.sampling_agency"></el-input>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <el-radio v-model="form.leave_status" label="0">在岗</el-radio>
+                    <el-radio v-model="form.leave_status" label="2">请假</el-radio>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -279,6 +294,7 @@ export default {
                         sii_sex: this.form.sii_sex,
                         sii_phone:this.form.sii_phone,
                         sampling_agency: this.form.sampling_agency,
+                        leave_status:this.form.leave_status
                     })
             )
                 .then (response => {
