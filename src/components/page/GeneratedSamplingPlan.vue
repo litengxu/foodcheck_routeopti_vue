@@ -96,8 +96,16 @@
                                 disable-transitions>{{scope.row.state}}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="80" align="center">
+                <el-table-column label="操作" width="160" align="center">
                     <template slot-scope="scope">
+                        <router-link :to="{path:'sampling_food_list',query:{id:scope.row.id}}">
+                            <el-button
+                                    type="text"
+                                    icon="el-icon-tickets">
+                                    <!--@click="handleview(scope.$index, scope.row)"-->
+                            查看</el-button>
+
+                        </router-link>
 
                         <el-button
                                 type="text"
@@ -176,13 +184,13 @@
                         })
                 )
                     .then (response => {
-                        console.log(response)
                         if(response == null){
                             return;
                         }
 //                        String类型的json串 转 json
                         for(var i=0;i<response.data.data.list.length;i++){
                             var  task_json = response.data.data.list[i].task_json;
+
                             task_json = JSON.parse(task_json)
 
                             var samplingnames="";
@@ -246,6 +254,12 @@
 
                     })
                     .catch(() => {});
+            },
+            handleview(index, row){
+                this.$router.push({
+                    name:"SamplingFoodList",
+                    params: { id: row.id }
+                })
             },
             seecompleted(){
                 this.completeorundo = 1

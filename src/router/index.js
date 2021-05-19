@@ -58,7 +58,14 @@ export default new Router({
                     meta: { title: '已生成抽检计划' }
                 },
                 {
+                    path: '/sampling_food_list',
+                    name:'SamplingFoodList',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingFoodList.vue'),
+                    meta: { title: '抽检食物列表' }
+                },
+                {
                     path: '/SamplingLibraryManagement',
+                    name:'SamplingLibraryManagement',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
                     meta: { title: '抽检库管理' }
                 },
@@ -178,3 +185,12 @@ export default new Router({
         }
     ]
 });
+
+
+
+
+
+const VueRouterPush = Router.prototype.push
+Router.prototype.push = function push (to) {
+    return VueRouterPush.call(this, to).catch(err => err)
+}

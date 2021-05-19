@@ -85,6 +85,9 @@ axios.interceptors.request.use(
         if(localStorage.getItem('token')){
             config.headers.Authorization =localStorage.getItem('token')
         }
+        if(localStorage.getItem('ms_username')){
+            config.headers.username =localStorage.getItem('ms_username')
+        }
         return config;
     },
     error =>{

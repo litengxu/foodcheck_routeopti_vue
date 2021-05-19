@@ -348,7 +348,7 @@
                     this.$message.error("抽检商家数量应大于等于抽检食品数量")
                     return;
                 }
-                this.fullscreenLoading = true
+
                 var selectedsamplingaccountid = [];
                 var typeoffoodselectedid = [];
 
@@ -374,6 +374,7 @@
                         if(response == null){
                             return;
                         }
+                        this.fullscreenLoading = true
                         _this.markers = []
                         _this.markers = response.data.data.route
                         var  message = response.data.data.message

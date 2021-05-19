@@ -99,7 +99,10 @@
                         }else if(i > 0){
                             this.$router.push(this.tagsList[i-1].path);
                         }else{
-                            this.$router.push('/');
+
+
+                                this.$router.push('/');
+
                         }
                         this.tagsList.splice(i, 1);
                         break;
@@ -142,8 +145,8 @@
         padding: 0 5px 0 12px;
         vertical-align: middle;
         color: #666;
-        -webkit-transition: all .3s ease-in;
-        -moz-transition: all .3s ease-in;
+         -webkit-transition: all .3s ease-in;
+         -moz-transition: all .3s ease-in;
         transition: all .3s ease-in;
     }
 
