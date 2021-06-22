@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo"style="width: 900px">食品安全优先管理的决策信息系统</div>
+        <div class="logo"style="width: 900px">食品安全优先管理决策信息系统</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
