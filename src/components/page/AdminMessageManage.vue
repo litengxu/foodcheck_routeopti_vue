@@ -181,6 +181,7 @@ export default {
             this.$axios.post('/superuser/addnewaccountmessage',
                 this.$qs.stringify(
                     {
+                        supername:localStorage.getItem('ms_username'),
                         name:this.addform.name,
                         password:this.addform.password,
                         username: this.addform.username,

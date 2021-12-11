@@ -109,6 +109,10 @@ export default {
                             index: 'food_risk_value_control',
                             title: '食品风险值管控'
                         },
+                        {
+                          index: 'food_risk_model',
+                          title: '食品风险值管控'
+                        },
                     ]
                 },{
                     icon: 'el-icon-lx-calendar',

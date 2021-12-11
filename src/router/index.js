@@ -64,10 +64,16 @@ export default new Router({
                     meta: { title: '抽检食物列表' }
                 },
                 {
+                    path: '/food_risk_model',
+                    name:'FoodRiskModel',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/FoodRiskModel.vue'),
+                    meta: { title: '食品风险模型' }
+                },
+                {
                     path: '/SamplingLibraryManagement',
                     name:'SamplingLibraryManagement',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/SamplingLibraryManagement.vue'),
-                    meta: { title: '抽检库管理' }
+                    meta: { title: '抽检库管理' ,adminpermission:true}
                 },
                 {
                     path: '/food_type_management',

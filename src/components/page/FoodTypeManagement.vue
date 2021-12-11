@@ -262,8 +262,8 @@
                         if(response == null){
                             return;
                         }
-                        this.sixteencategoriesdata = response.data.data;
-                        this.sixteencategoriesquery.pageTotal = 31;
+                        this.sixteencategoriesdata = response.data.data.list;
+                        this.sixteencategoriesquery.pageTotal = response.data.data.total;
                     });
             },
             /*exce处理进程弹出层分页*/

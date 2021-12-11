@@ -33,7 +33,7 @@
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
                 <el-table-column sortable prop="sii_account" label="账号"></el-table-column>
-                <el-table-column sortable prop="sii_password" label="密码"></el-table-column>
+<!--                <el-table-column sortable prop="sii_password" label="密码"></el-table-column>-->
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-switch

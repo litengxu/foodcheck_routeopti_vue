@@ -3,12 +3,19 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 抽检库管理
+                    <i class="el-icon-lx-cascades"></i> 抽检风险值管理
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
-
+          <div class="handle-box">
+            <el-button
+                type="primary"
+                icon="el-icon-plus"
+                class="handle-del mr10"
+                @click="dialogFormVisible = true"
+            >增加食品类型</el-button>
+          </div>
             <!--基本信息-->
             <el-table
                     :data="tableData"
@@ -61,6 +68,21 @@
                 ></el-pagination>
             </div>
         </div>
+        <!-- 添加弹出框 -->
+        <el-dialog v-dialogDrag title="增加自定义食品类型" :visible.sync="dialogFormVisible">
+          <el-form :model="addform"  :rules="rules">
+            <el-form-item prop="food_type"label="类型" :label-width="formLabelWidth" >
+              <el-input v-model="addform.food_type" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item prop="risk_value"label="风险值" :label-width="formLabelWidth" >
+              <el-input v-model="addform.risk_value" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="addnewsiinformation()">确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog v-dialogDrag title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="form" :model="form" label-width="70px">
@@ -103,7 +125,7 @@
 //                pageSize: [100, 200, 300, 400]
                 },
                 tableData: [],
-
+                dialogFormVisible: false,
                 multipleSelection: [],
                 delList: [],
                 editVisible: false,
@@ -111,6 +133,10 @@
                 form: {},
                 idx: -1,
                 id: -1,
+                addform: {
+                  food_type:'',
+                  risk_value:'',
+                },
             };
         },
         created() {
@@ -130,8 +156,8 @@
                         if(response == null){
                             return;
                         }
-                        this.tableData = response.data.data;
-                        this.pageTotal =31;
+                        this.tableData = response.data.data.list;
+                        this.pageTotal =response.data.data.total;
                     });
             },
 
@@ -182,7 +208,33 @@
                 this.$set(this.query, 'pageIndex', val);
                 this.getData();
             },
+            //添加操作
+            addnewsiinformation(){
 
+              this.$axios.post('/sstype/addsixteencategories',
+                  this.$qs.stringify(
+                      {
+                        food_type:this.addform.food_type,
+                        risk_value: this.addform.risk_value
+                      })
+              )
+                  .then (response => {
+                    if(response == null){
+                      return;
+                    }
+                    if(this.addform.food_type == null){
+                      this.$message.error('请填写所需信息');
+                      return;
+                    }
+                    if(this.addform.risk_value == null){
+                      this.$message.error('请填写所需信息');
+                      return;
+                    }
+                    this.$message.success('添加成功！');
+                    this.getData();
+
+                  });
+            },
         }
     };
 </script>

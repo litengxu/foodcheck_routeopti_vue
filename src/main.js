@@ -17,10 +17,12 @@ import qs from 'qs';
 
 Vue.prototype.$qs = qs;
 Vue.prototype.$axios = Axios;
+
 // Axios.defaults.baseURL = 'http://211.159.161.189:7070';
 Axios.defaults.baseURL = 'http://127.0.0.1:7070';
+// Axios.defaults.baseURL = 'http://81.70.154.182:7070';
 // Axios.defaults.baseURL = 'http://47.94.240.186:7070';
-Vue.prototype.$api = Api;
+// Vue.prototype.$api = Api;
 Vue.prototype.$store = store;
 
 Vue.config.productionTip = false;

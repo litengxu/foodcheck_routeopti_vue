@@ -301,6 +301,7 @@
 <script>
     import { fetchData } from '../../api/index';
     import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
+    import $ from '../../../node_modules/jquery'
     export default {
         components: {ElCheckbox},
         name: 'samplinglibrary',
@@ -382,7 +383,6 @@
                         if(response == null){
                             return;
                         }
-                        console.log(response);
                         this.foodtypes = [];
                         this.tableData = response.data.data.sysSamplingLibraries;
                         for(var i=0;i<response.data.data.foodTypes.length;i++){
@@ -666,7 +666,60 @@
             },
             /*下载模板*/
              downLoad() {
-                    window.open(this.$axios.defaults.baseURL+ "/sslibrary/download", '_blank')
+               //   var params = {
+               //     Authorization: localStorage.getItem('token'),
+               //   };
+               //  var url = [this.$axios.defaults.baseURL+ "/sslibrary/download", $.param(params)].join('?');
+               // // window.location.href = this.$axios.defaults.baseURL+ "/sslibrary/download"
+               // window.open(url, '_blank')
+               return this.$axios({
+                 method: 'post',
+                 url: this.$axios.defaults.baseURL+ "/sslibrary/download",
+                 responseType: 'blob',
+                 headers: {
+                   // Authorization: localStorage.getItem('token'),
+                   'Content-Type': 'application/json; application/octet-stream'
+                 }
+               }) .then(response => {
+                 //文件名 文件保存对话框中的默认显示
+                 let fileName = 'templateexcel.xlsx';
+                 let data = response.data;
+                 if(!data){
+                   return
+                 }
+                 console.log(response);
+                 //构造a标签 通过a标签来下载
+                 let url = window.URL.createObjectURL(new Blob([data]))
+                 let a = document.createElement('a')
+                 a.style.display = 'none'
+                 a.href = url
+                 //此处的download是a标签的内容，固定写法，不是后台api接口
+                 a.setAttribute('download',fileName)
+                 document.body.appendChild(a)
+                 //点击下载
+                 a.click()
+                 // 下载完成移除元素
+                 document.body.removeChild(a);
+                 // 释放掉blob对象
+                 window.URL.revokeObjectURL(url);
+               })
+                   .catch(response => {
+                     this.$message.error(response);
+                   });
+             },
+            downloadFile(data) {
+              // 文件导出
+              if (!data) {
+                return
+              }
+              let url = window.URL.createObjectURL(new Blob([data]));
+              let link = document.createElement('a');
+              link.style.display = 'none';
+              link.href = url;
+              link.setAttribute('download', '测试excel.xlsx');
+
+              document.body.appendChild(link);
+              link.click()
             }
         }
     };

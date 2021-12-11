@@ -21,7 +21,7 @@
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <!--<el-table-column prop="id" label="ID" width="55" align="center" v-show="false"></el-table-column>-->
                 <el-table-column sortable prop="s_account" label="抽检主体"></el-table-column>
-                <el-table-column prop="s_password" label="密码"></el-table-column>
+<!--                <el-table-column prop="s_password" label="密码"></el-table-column>-->
                 <el-table-column sortable prop="s_username" label="用户名"></el-table-column>
                 <!--<el-table-column prop="sampling_inspector_ids" label="分配的抽检员id信息"></el-table-column>-->
                 <el-table-column sortable prop="sampling_inspector_names" label="分配的抽检员姓名"></el-table-column>

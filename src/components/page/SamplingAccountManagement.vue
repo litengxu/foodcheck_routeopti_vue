@@ -184,7 +184,7 @@
                 <el-button @click="randomVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saverandom">确 定</el-button>
             </span>
-    </el-dialog>
+        </el-dialog>
     </div>
 </template>
 
